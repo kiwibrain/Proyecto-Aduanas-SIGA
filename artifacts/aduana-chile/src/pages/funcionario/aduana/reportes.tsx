@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
+import { FileDown, Table2 } from "lucide-react";
 
 export default function AduanaReportes() {
   const { toast } = useToast();
@@ -15,29 +16,47 @@ export default function AduanaReportes() {
     toast({ title: "Reporte generado", description: "Mostrando resultados del periodo seleccionado." });
   };
 
+  const handleExportPDF = () => {
+    window.print();
+  };
+
+  const handleExportExcel = () => {
+    toast({ title: "Exportando", description: "Generando archivo Excel..." });
+  };
+
   return (
     <Layout>
-      <div className="max-w-5xl mx-auto space-y-8">
-        <h1 className="text-3xl font-bold text-gray-900">Generador de Reportes</h1>
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <h1 className="text-3xl font-extrabold text-[#00205B]">Generador de Reportes</h1>
+          <div className="flex gap-3">
+            <Button onClick={handleExportPDF} className="bg-[#D52B1E] hover:bg-[#b52418] text-white">
+              <FileDown className="mr-2 h-4 w-4" /> Exportar PDF
+            </Button>
+            <Button onClick={handleExportExcel} className="bg-[#14883F] hover:bg-[#0f6830] text-white">
+              <Table2 className="mr-2 h-4 w-4" /> Exportar Excel
+            </Button>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Filtros</CardTitle>
+        <Card className="shadow-sm border-gray-100">
+          <CardHeader className="bg-gray-50 border-b border-gray-100 pb-4">
+            <CardTitle>Filtros de Búsqueda</CardTitle>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <CardContent className="pt-6">
+            <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
               <div className="space-y-2">
                 <Label>Fecha Desde</Label>
-                <Input type="date" required />
+                <Input type="date" required className="bg-white" />
               </div>
               <div className="space-y-2">
                 <Label>Fecha Hasta</Label>
-                <Input type="date" required />
+                <Input type="date" required className="bg-white" />
               </div>
               <div className="space-y-2">
                 <Label>Tipo Trámite</Label>
                 <Select defaultValue="todos">
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="todos">Todos</SelectItem>
                     <SelectItem value="declaracion">Declaración</SelectItem>
@@ -45,40 +64,70 @@ export default function AduanaReportes() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button type="submit" className="w-full">Generar Reporte</Button>
+              <div className="space-y-2">
+                <Label>Estado</Label>
+                <Select defaultValue="todos">
+                  <SelectTrigger className="bg-white"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">Todos</SelectItem>
+                    <SelectItem value="aprobado">Aprobado</SelectItem>
+                    <SelectItem value="rechazado">Rechazado</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button type="submit" className="w-full bg-[#0032A0] hover:bg-[#00205B]">Filtrar</Button>
             </form>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Resultados</CardTitle>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 shadow-sm">
+            <p className="text-3xl font-black text-[#0032A0]">177</p>
+            <p className="text-sm text-gray-600 font-medium mt-1">Total Procesados</p>
+          </div>
+          <div className="bg-green-50 border border-green-100 rounded-xl p-5 shadow-sm">
+            <p className="text-3xl font-black text-green-600">170</p>
+            <p className="text-sm text-gray-600 font-medium mt-1">Aprobados</p>
+          </div>
+          <div className="bg-red-50 border border-red-100 rounded-xl p-5 shadow-sm">
+            <p className="text-3xl font-black text-red-600">7</p>
+            <p className="text-sm text-gray-600 font-medium mt-1">Rechazados</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-100 rounded-xl p-5 shadow-sm">
+            <p className="text-3xl font-black text-amber-600">96%</p>
+            <p className="text-sm text-gray-600 font-medium mt-1">Tasa de Aprobación</p>
+          </div>
+        </div>
+
+        <Card className="shadow-sm border-gray-100 overflow-hidden">
+          <CardHeader className="bg-white border-b border-gray-100">
+            <CardTitle>Resultados del Periodo</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-0">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50">
                 <TableRow>
-                  <TableHead>Fecha</TableHead>
+                  <TableHead className="pl-6">Fecha</TableHead>
                   <TableHead>Tipo</TableHead>
                   <TableHead>Total Procesados</TableHead>
                   <TableHead>Aprobados</TableHead>
-                  <TableHead>Rechazados</TableHead>
+                  <TableHead className="pr-6">Rechazados</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 <TableRow>
-                  <TableCell>10/06/2025</TableCell>
+                  <TableCell className="pl-6 font-medium">10/06/2025</TableCell>
                   <TableCell>Declaración Productos</TableCell>
-                  <TableCell>145</TableCell>
-                  <TableCell className="text-green-600">140</TableCell>
-                  <TableCell className="text-red-600">5</TableCell>
+                  <TableCell className="font-semibold text-gray-700">145</TableCell>
+                  <TableCell className="text-[#14883F] font-bold">140</TableCell>
+                  <TableCell className="text-[#D52B1E] font-bold pr-6">5</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>10/06/2025</TableCell>
+                  <TableCell className="pl-6 font-medium">10/06/2025</TableCell>
                   <TableCell>Registro Vehículo</TableCell>
-                  <TableCell>32</TableCell>
-                  <TableCell className="text-green-600">30</TableCell>
-                  <TableCell className="text-red-600">2</TableCell>
+                  <TableCell className="font-semibold text-gray-700">32</TableCell>
+                  <TableCell className="text-[#14883F] font-bold">30</TableCell>
+                  <TableCell className="text-[#D52B1E] font-bold pr-6">2</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
