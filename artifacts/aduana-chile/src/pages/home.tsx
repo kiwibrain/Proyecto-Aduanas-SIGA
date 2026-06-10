@@ -4,20 +4,22 @@ import { Plane, Car, Users, FileText, Shield, CheckCircle, ArrowRight, Globe, Lo
 
 export default function Home() {
   return (
-    <Layout>
-      <div className="-mx-4 -mt-8">
+    <Layout fullWidth>
+      <div>
         {/* HERO */}
         <section className="hero-gradient text-white py-20 px-4">
           <div className="container mx-auto max-w-5xl flex flex-col md:flex-row items-center gap-12">
             <div className="flex-1">
-              <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
+                      <span className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/90 text-xs font-semibold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
                 <Shield className="h-3 w-3" /> Portal Oficial · Gobierno de Chile
               </span>
-              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-                Sistema Integrado de<br />
-                <span className="text-[#7BC8FF]">Gestión Aduanera</span>
+              <h1 className="text-6xl md:text-7xl font-black leading-none mb-3 tracking-tight">
+                SIGA
               </h1>
-              <p className="text-white/80 text-lg mb-8 max-w-lg">
+              <p className="text-[#7BC8FF] text-lg font-semibold mb-3 uppercase tracking-widest">
+                Sistema Digital de Gestión Aduanera
+              </p>
+              <p className="text-white/80 text-base mb-8 max-w-lg">
                 Realice sus trámites de frontera de forma digital, rápida y segura desde cualquier dispositivo.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">

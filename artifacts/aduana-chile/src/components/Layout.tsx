@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { GovernmentLogo } from "./GovernmentLogo";
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export function Layout({ children, fullWidth = false }: { children: React.ReactNode; fullWidth?: boolean }) {
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-[#0032A0] text-white px-4 py-2 rounded z-50 font-medium">
@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           Conexión segura TLS 1.3
         </span>
       </div>
-      <main id="main-content" role="main" className="flex-1 w-full container mx-auto px-4 py-8">
+      <main id="main-content" role="main" className={fullWidth ? "flex-1 w-full" : "flex-1 w-full container mx-auto px-4 py-8"}>
         {children}
       </main>
       <footer role="contentinfo" className="bg-[#00205B] text-white py-8 mt-auto">
