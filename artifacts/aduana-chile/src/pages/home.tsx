@@ -66,65 +66,88 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ROLE CARDS */}
+        {/* ACCESS SECTION */}
         <section className="bg-[#F7F8FA] py-16 px-4">
           <div className="container mx-auto max-w-5xl">
             <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">¿Cómo deseas ingresar?</h2>
-            <p className="text-center text-gray-500 mb-10">Seleccione su perfil para acceder a las funciones correspondientes</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {[
-                { 
-                  title: "Viajero", 
-                  desc: "Declare productos, registre su vehículo y gestione autorizaciones de menores.", 
-                  icon: <Plane className="h-8 w-8" />, 
-                  href: "/login", 
-                  btnLabel: "Ingresar",
-                  accent: "border-t-[#0032A0]",
-                  iconBg: "bg-blue-50 text-[#0032A0]",
-                  btnClass: "bg-[#0032A0] hover:bg-[#00205B] text-white"
-                },
-                { 
-                  title: "Funcionario Aduana", 
-                  desc: "Gestión de trámites, aprobación de ingresos y generación de reportes.", 
-                  icon: <Shield className="h-8 w-8" />, 
-                  href: "/login", 
-                  btnLabel: "Acceso Aduana",
-                  accent: "border-t-[#D52B1E]",
-                  iconBg: "bg-red-50 text-[#D52B1E]",
-                  btnClass: "bg-[#D52B1E] hover:bg-[#b52418] text-white"
-                },
-                { 
-                  title: "Funcionario PDI", 
-                  desc: "Validación de identidad y control migratorio en fronteras.", 
-                  icon: <Lock className="h-8 w-8" />, 
-                  href: "/login", 
-                  btnLabel: "Acceso PDI",
-                  accent: "border-t-[#14883F]",
-                  iconBg: "bg-green-50 text-[#14883F]",
-                  btnClass: "bg-[#14883F] hover:bg-[#0f6830] text-white"
-                },
-                { 
-                  title: "Funcionario SAG", 
-                  desc: "Revisión fitosanitaria y control de productos declarados.", 
-                  icon: <BarChart3 className="h-8 w-8" />, 
-                  href: "/login", 
-                  btnLabel: "Acceso SAG",
-                  accent: "border-t-[#F59E0B]",
-                  iconBg: "bg-amber-50 text-[#D97706]",
-                  btnClass: "bg-[#D97706] hover:bg-[#b45309] text-white"
-                },
-              ].map((role, i) => (
-                <div key={i} className={`bg-white rounded-xl shadow-sm border border-gray-100 border-t-4 ${role.accent} p-6 flex flex-col hover:shadow-md transition-shadow`}>
-                  <div className={`w-14 h-14 rounded-xl ${role.iconBg} flex items-center justify-center mb-4`}>
-                    {role.icon}
-                  </div>
-                  <h3 className="font-bold text-gray-900 text-lg mb-2">{role.title}</h3>
-                  <p className="text-gray-500 text-sm flex-1 mb-5">{role.desc}</p>
-                  <Link href={role.href} className={`w-full py-2.5 px-4 rounded-lg font-semibold text-sm transition-colors text-center ${role.btnClass}`}>
-                    {role.btnLabel}
-                  </Link>
+            <p className="text-center text-gray-500 mb-12">Seleccione su perfil para acceder a las funciones correspondientes</p>
+
+            <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+
+              {/* VIAJERO — tarjeta prominente */}
+              <div className="flex-1 bg-white rounded-2xl shadow-md border border-gray-100 border-t-4 border-t-[#0032A0] p-8 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+                <div className="w-20 h-20 rounded-2xl bg-blue-50 text-[#0032A0] flex items-center justify-center mb-5">
+                  <Plane className="h-10 w-10" />
                 </div>
-              ))}
+                <span className="text-xs font-semibold uppercase tracking-widest text-[#0032A0] mb-1">Acceso ciudadano</span>
+                <h3 className="font-extrabold text-gray-900 text-2xl mb-3">Viajero</h3>
+                <p className="text-gray-500 text-sm flex-1 mb-6 max-w-xs">
+                  Declare sus productos, registre su vehículo y gestione autorizaciones de menores para cruzar la frontera.
+                </p>
+                <Link href="/login" className="w-full py-3 px-6 rounded-xl bg-[#0032A0] hover:bg-[#00205B] text-white font-bold text-base transition-colors text-center">
+                  Ingresar como Viajero
+                </Link>
+              </div>
+
+              {/* DIVIDER */}
+              <div className="hidden lg:flex flex-col items-center justify-center gap-2 px-2">
+                <div className="w-px flex-1 bg-gray-200" />
+                <span className="text-xs text-gray-400 font-medium whitespace-nowrap bg-[#F7F8FA] px-2 py-1 rounded-full border border-gray-200">o bien</span>
+                <div className="w-px flex-1 bg-gray-200" />
+              </div>
+              <div className="lg:hidden flex items-center gap-3">
+                <div className="flex-1 h-px bg-gray-200" />
+                <span className="text-xs text-gray-400 font-medium">o bien</span>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+
+              {/* FUNCIONARIOS — panel agrupado */}
+              <div className="flex-1 bg-white rounded-2xl shadow-md border border-gray-100 p-8 flex flex-col hover:shadow-lg transition-shadow">
+                <div className="mb-6">
+                  <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">Acceso institucional</span>
+                  <h3 className="font-extrabold text-gray-900 text-2xl mt-1">Ingreso de Funcionarios</h3>
+                  <p className="text-gray-500 text-sm mt-2">Acceso exclusivo para personal de organismos fiscalizadores del Estado.</p>
+                </div>
+                <div className="flex flex-col gap-3 flex-1">
+                  {[
+                    {
+                      title: "Aduana",
+                      desc: "Gestión de trámites y aprobación de ingresos",
+                      icon: <Shield className="h-5 w-5" />,
+                      iconBg: "bg-red-50 text-[#D52B1E]",
+                      btnClass: "border-[#D52B1E] text-[#D52B1E] hover:bg-[#D52B1E] hover:text-white",
+                    },
+                    {
+                      title: "PDI",
+                      desc: "Validación de identidad y control migratorio",
+                      icon: <Lock className="h-5 w-5" />,
+                      iconBg: "bg-green-50 text-[#14883F]",
+                      btnClass: "border-[#14883F] text-[#14883F] hover:bg-[#14883F] hover:text-white",
+                    },
+                    {
+                      title: "SAG",
+                      desc: "Revisión fitosanitaria y productos declarados",
+                      icon: <BarChart3 className="h-5 w-5" />,
+                      iconBg: "bg-amber-50 text-[#D97706]",
+                      btnClass: "border-[#D97706] text-[#D97706] hover:bg-[#D97706] hover:text-white",
+                    },
+                  ].map((f, i) => (
+                    <div key={i} className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50/60 hover:bg-white hover:border-gray-200 transition-all">
+                      <div className={`w-10 h-10 rounded-xl ${f.iconBg} flex items-center justify-center shrink-0`}>
+                        {f.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-gray-900 text-sm">Funcionario {f.title}</p>
+                        <p className="text-gray-400 text-xs truncate">{f.desc}</p>
+                      </div>
+                      <Link href="/login" className={`shrink-0 px-4 py-1.5 rounded-lg border-2 font-semibold text-xs transition-colors ${f.btnClass}`}>
+                        Acceder
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
