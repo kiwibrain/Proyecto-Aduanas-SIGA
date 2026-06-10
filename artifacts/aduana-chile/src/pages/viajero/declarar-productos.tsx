@@ -10,7 +10,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
-import { HelpCircle, Download } from "lucide-react";
+import { HelpCircle, Download, ChevronLeft } from "lucide-react";
+import { Link } from "wouter";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function DeclararProductos() {
@@ -90,6 +91,9 @@ export default function DeclararProductos() {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto space-y-8">
+        <Link href="/viajero" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#0032A0] transition-colors">
+          <ChevronLeft className="h-4 w-4" /> Volver a mi panel
+        </Link>
         <div>
           <h1 className="text-2xl font-bold mb-4">
             {step === 1 && "Paso 1 de 3: Declaración SAG"}

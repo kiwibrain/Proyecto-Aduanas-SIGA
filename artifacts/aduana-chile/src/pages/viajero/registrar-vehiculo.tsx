@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
 import { formatPatente, validatePatente } from "@/lib/masks";
-import { AlertCircle, CheckCircle2, Info } from "lucide-react";
+import { AlertCircle, CheckCircle2, Info, ChevronLeft } from "lucide-react";
+import { Link } from "wouter";
 
 export default function RegistrarVehiculo() {
   const { toast } = useToast();
@@ -71,6 +72,9 @@ export default function RegistrarVehiculo() {
   return (
     <Layout>
       <div className="max-w-2xl mx-auto space-y-6">
+        <Link href="/viajero" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#0032A0] transition-colors">
+          <ChevronLeft className="h-4 w-4" /> Volver a mi panel
+        </Link>
         {isPrefilled && (
           <div className="bg-blue-50 border border-blue-200 text-blue-800 p-4 rounded-md flex items-start gap-3">
             <Info className="h-5 w-5 mt-0.5 text-blue-600 flex-shrink-0" />

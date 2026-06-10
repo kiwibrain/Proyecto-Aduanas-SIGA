@@ -8,7 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Progress } from "@/components/ui/progress";
 import { formatRut, validateRut } from "@/lib/masks";
-import { AlertCircle, CheckCircle2, Upload, File as FileIcon } from "lucide-react";
+import { AlertCircle, CheckCircle2, Upload, File as FileIcon, ChevronLeft } from "lucide-react";
+import { Link } from "wouter";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function AutorizacionMenor() {
@@ -111,6 +112,9 @@ export default function AutorizacionMenor() {
   return (
     <Layout>
       <div className="max-w-2xl mx-auto space-y-8">
+        <Link href="/viajero" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-[#0032A0] transition-colors">
+          <ChevronLeft className="h-4 w-4" /> Volver a mi panel
+        </Link>
         <div>
           <h1 className="text-2xl font-bold mb-4">
             {step === 1 && "Paso 1 de 3: Datos del Menor"}

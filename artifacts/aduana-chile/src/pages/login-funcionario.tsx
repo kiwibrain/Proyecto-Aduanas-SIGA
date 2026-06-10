@@ -7,13 +7,22 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Shield, Lock, ChevronLeft } from "lucide-react";
 import { GovernmentLogo } from "@/components/GovernmentLogo";
+import { useAuth, UserRole } from "@/lib/auth";
+
+const DEMO_NAMES: Record<string, string> = {
+  aduana: "Inspector García",
+  pdi: "Agente Rodríguez",
+  sag: "Técnico Herrera",
+};
 
 export default function LoginFuncionario() {
   const [, setLocation] = useLocation();
+  const { login } = useAuth();
   const [role, setRole] = useState("aduana");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    login(DEMO_NAMES[role] ?? "Funcionario", role as UserRole);
     if (role === "aduana") setLocation("/funcionario/aduana");
     else if (role === "pdi") setLocation("/funcionario/pdi");
     else if (role === "sag") setLocation("/funcionario/sag");
@@ -29,7 +38,6 @@ export default function LoginFuncionario() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left panel */}
       <div className="hidden md:flex hero-gradient w-1/2 p-12 flex-col justify-center text-white relative">
         <Link href="/" className="absolute top-8 left-8 hover:opacity-90 transition-opacity">
           <GovernmentLogo />
@@ -42,9 +50,9 @@ export default function LoginFuncionario() {
           <p className="text-white/80 mb-8 text-sm">Acceso exclusivo para personal de organismos fiscalizadores del Estado de Chile.</p>
           <div className="space-y-3">
             {[
-              { key: "aduana", color: "border-red-400 text-red-200",   label: "Aduana",  desc: "Gestión de trámites y reportes" },
-              { key: "pdi",    color: "border-green-400 text-green-200", label: "PDI",    desc: "Control migratorio e identidad" },
-              { key: "sag",    color: "border-amber-400 text-amber-200", label: "SAG",    desc: "Revisión fitosanitaria" },
+              { key: "aduana", color: "border-red-400 text-red-200",    label: "Aduana", desc: "Gestión de trámites y reportes" },
+              { key: "pdi",    color: "border-green-400 text-green-200", label: "PDI",   desc: "Control migratorio e identidad" },
+              { key: "sag",    color: "border-amber-400 text-amber-200", label: "SAG",   desc: "Revisión fitosanitaria" },
             ].map((r) => (
               <div key={r.key} className={`flex items-center gap-3 p-3 rounded-xl border ${role === r.key ? "bg-white/15 border-white/40" : "bg-white/5 border-white/10"} transition-colors`}>
                 <span className={`text-xs font-bold uppercase tracking-wider ${r.color}`}>{r.label}</span>
@@ -55,7 +63,6 @@ export default function LoginFuncionario() {
         </div>
       </div>
 
-      {/* Right panel */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[#F7F8FA] relative">
         <Link href="/" className="md:hidden absolute top-8 left-8 hover:opacity-90 transition-opacity">
           <GovernmentLogo />
@@ -91,7 +98,7 @@ export default function LoginFuncionario() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="rut-func" className="font-semibold text-gray-700">RUT Funcionario</Label>
-                  <Input id="rut-func" placeholder="Ej: 12.345.678-9" required className="bg-gray-50 border-gray-200" />
+                  <Input id="rut-func" autoComplete="username" placeholder="Ej: 12.345.678-9" required className="bg-gray-50 border-gray-200" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password-func" className="font-semibold text-gray-700">Contraseña Institucional</Label>

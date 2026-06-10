@@ -5,18 +5,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Shield, CheckCircle, Lock, ChevronLeft } from "lucide-react";
 import { GovernmentLogo } from "@/components/GovernmentLogo";
+import { useAuth } from "@/lib/auth";
+import { useRef } from "react";
 
 export default function Login() {
   const [, setLocation] = useLocation();
+  const { login } = useAuth();
+  const rutRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const nombre = rutRef.current?.value || "Viajero";
+    login(nombre, "viajero");
     setLocation("/viajero");
   };
 
   return (
     <div className="min-h-screen flex">
-      {/* Left - blue */}
       <div className="hidden md:flex hero-gradient w-1/2 p-12 flex-col justify-center text-white relative">
         <Link href="/" className="absolute top-8 left-8 hover:opacity-90 transition-opacity">
           <GovernmentLogo />
@@ -44,7 +49,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* Right - white */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[#F7F8FA] relative">
         <Link href="/" className="md:hidden absolute top-8 left-8 hover:opacity-90 transition-opacity">
           <GovernmentLogo />
@@ -67,7 +71,7 @@ export default function Login() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="rut" className="font-semibold text-gray-700">RUT o Correo Electrónico</Label>
-                  <Input id="rut" placeholder="Ej: 12.345.678-9" required className="bg-gray-50 border-gray-200" />
+                  <Input ref={rutRef} id="rut" autoComplete="username" placeholder="Ej: 12.345.678-9" required className="bg-gray-50 border-gray-200" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password" className="font-semibold text-gray-700">Contraseña</Label>

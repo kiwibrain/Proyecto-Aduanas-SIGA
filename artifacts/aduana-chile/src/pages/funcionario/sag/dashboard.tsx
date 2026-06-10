@@ -6,25 +6,92 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, CheckCircle2, XCircle } from "lucide-react";
+
+type ItemEstado = "Pendiente" | "Aprobado" | "Retenido";
+
+interface SAGItem {
+  id: number;
+  nombre: string;
+  categoria: string;
+  cantidad: string;
+  estado: ItemEstado;
+}
+
+interface SAGEntry {
+  id: number;
+  viajero: string;
+  rut: string;
+  items: SAGItem[];
+  valor: number;
+  riesgo: string;
+  estado: string;
+}
 
 export default function SAGDashboard() {
   const { toast } = useToast();
-  const [queue, setQueue] = useState([
-    { id: 1, viajero: "Pedro Pascal", productos: "Semillas, Miel", valor: 45, riesgo: "Alto", estado: "Pendiente" },
-    { id: 2, viajero: "Camila Vallejo", productos: "Ropa, Electrónica", valor: 450, riesgo: "Bajo", estado: "Pendiente" }
+  const [queue, setQueue] = useState<SAGEntry[]>([
+    {
+      id: 1,
+      viajero: "Pedro Pascal",
+      rut: "12.345.678-9",
+      items: [
+        { id: 1, nombre: "Semillas de maíz (500g)", categoria: "Fitosanitario", cantidad: "1 bolsa", estado: "Pendiente" },
+        { id: 2, nombre: "Miel artesanal", categoria: "Animal procesado", cantidad: "2 frascos (500g c/u)", estado: "Pendiente" },
+        { id: 3, nombre: "Flores frescas", categoria: "Material vegetal", cantidad: "1 ramo", estado: "Pendiente" },
+      ],
+      valor: 45,
+      riesgo: "Alto",
+      estado: "Pendiente"
+    },
+    {
+      id: 2,
+      viajero: "Camila Vallejo",
+      rut: "15.221.849-K",
+      items: [
+        { id: 1, nombre: "Ropa (x5 prendas)", categoria: "Textil", cantidad: "5 unidades", estado: "Pendiente" },
+        { id: 2, nombre: "Laptop Dell XPS", categoria: "Electrónica", cantidad: "1 unidad", estado: "Pendiente" },
+      ],
+      valor: 450,
+      riesgo: "Bajo",
+      estado: "Pendiente"
+    }
   ]);
 
-  const handleReview = (id: number, decision: string) => {
-    setQueue(queue.filter(q => q.id !== id));
-    toast({ title: "Revisión completada", description: `Declaración marcada como ${decision}.` });
+  const updateItemEstado = (entryId: number, itemId: number, newEstado: ItemEstado) => {
+    setQueue(prev => prev.map(entry => {
+      if (entry.id !== entryId) return entry;
+      const updatedItems = entry.items.map(item =>
+        item.id === itemId ? { ...item, estado: newEstado } : item
+      );
+      const allResolved = updatedItems.every(i => i.estado !== "Pendiente");
+      const hasRetained = updatedItems.some(i => i.estado === "Retenido");
+      return {
+        ...entry,
+        items: updatedItems,
+        estado: allResolved ? (hasRetained ? "Con Retención" : "Aprobado") : "En Revisión"
+      };
+    }));
+    toast({
+      title: newEstado === "Aprobado" ? "Ítem aprobado" : "Ítem retenido",
+      description: `El artículo ha sido marcado como ${newEstado}.`
+    });
   };
 
   const getRiesgoColor = (riesgo: string) => {
-    switch(riesgo) {
+    switch (riesgo) {
       case 'Alto': return "bg-red-100 text-red-800 border-red-200";
       case 'Medio': return "bg-amber-100 text-amber-800 border-amber-200";
       default: return "bg-green-100 text-green-800 border-green-200";
+    }
+  };
+
+  const getEntryEstadoColor = (estado: string) => {
+    switch (estado) {
+      case "Aprobado": return "bg-green-100 text-green-800 border-green-200";
+      case "Con Retención": return "bg-red-100 text-red-800 border-red-200";
+      case "En Revisión": return "bg-blue-100 text-blue-800 border-blue-200";
+      default: return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
@@ -51,7 +118,7 @@ export default function SAGDashboard() {
           <Card className="border-t-4 border-t-amber-500 shadow-sm">
             <CardContent className="p-6">
               <p className="text-sm font-medium text-gray-500">Por revisar</p>
-              <p className="text-3xl font-bold text-gray-900 mt-1">{queue.length}</p>
+              <p className="text-3xl font-bold text-gray-900 mt-1">{queue.filter(q => q.estado === "Pendiente" || q.estado === "En Revisión").length}</p>
             </CardContent>
           </Card>
           <Card className="border-t-4 border-t-green-500 shadow-sm">
@@ -83,7 +150,8 @@ export default function SAGDashboard() {
               <TableHeader className="bg-gray-50">
                 <TableRow>
                   <TableHead className="pl-6">Viajero</TableHead>
-                  <TableHead>Productos Declarados</TableHead>
+                  <TableHead>RUT</TableHead>
+                  <TableHead>Ítems declarados</TableHead>
                   <TableHead>Valor Total</TableHead>
                   <TableHead>Nivel Riesgo</TableHead>
                   <TableHead>Estado</TableHead>
@@ -94,36 +162,93 @@ export default function SAGDashboard() {
                 {queue.map((q) => (
                   <TableRow key={q.id}>
                     <TableCell className="pl-6 font-semibold">{q.viajero}</TableCell>
-                    <TableCell className="text-gray-600">{q.productos}</TableCell>
+                    <TableCell className="font-mono text-sm text-gray-600">{q.rut}</TableCell>
+                    <TableCell>
+                      <span className="text-sm text-gray-600">{q.items.length} ítem{q.items.length !== 1 ? "s" : ""}</span>
+                      <div className="flex gap-1 mt-1">
+                        {q.items.map(i => (
+                          <span key={i.id} className={`inline-block w-2 h-2 rounded-full ${
+                            i.estado === "Aprobado" ? "bg-green-400" :
+                            i.estado === "Retenido" ? "bg-red-400" : "bg-gray-300"
+                          }`} title={`${i.nombre}: ${i.estado}`} />
+                        ))}
+                      </div>
+                    </TableCell>
                     <TableCell className="font-mono font-medium">${q.valor}</TableCell>
                     <TableCell>
                       <Badge className={getRiesgoColor(q.riesgo)} variant="outline">{q.riesgo}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-gray-100 text-gray-700 border-gray-200">{q.estado}</Badge>
+                      <Badge variant="outline" className={getEntryEstadoColor(q.estado)}>{q.estado}</Badge>
                     </TableCell>
                     <TableCell className="pr-6">
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" className="border-[#D97706] text-[#D97706] hover:bg-amber-50">Revisar</Button>
+                          <Button size="sm" variant="outline" className="border-[#D97706] text-[#D97706] hover:bg-amber-50">Revisar ítems</Button>
                         </DialogTrigger>
-                        <DialogContent>
+                        <DialogContent className="max-w-lg">
                           <DialogHeader>
-                            <DialogTitle className="text-xl">Revisión SAG: {q.viajero}</DialogTitle>
+                            <DialogTitle className="text-xl">Revisión SAG — {q.viajero}</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4 pt-2">
-                            <div className="bg-amber-50/50 border border-amber-100 p-4 rounded-lg">
-                              <p className="text-sm font-semibold text-amber-800 mb-1">Detalle de productos declarados:</p>
-                              <p className="text-lg font-medium">{q.productos}</p>
-                              <div className="mt-3 pt-3 border-t border-amber-100 flex justify-between">
-                                <span className="text-sm text-gray-500">Valor estimado:</span>
-                                <span className="font-mono font-bold">${q.valor}</span>
+                            <div className="flex items-center justify-between text-sm bg-gray-50 rounded-lg p-3 border">
+                              <span className="text-gray-500">RUT: <strong className="text-gray-800 font-mono">{q.rut}</strong></span>
+                              <span className="text-gray-500">Valor total: <strong className="font-mono">${q.valor}</strong></span>
+                            </div>
+
+                            <p className="text-sm font-semibold text-gray-700">Ítems declarados — revise individualmente:</p>
+
+                            <div className="space-y-2">
+                              {q.items.map((item) => (
+                                <div key={item.id} className={`flex items-start justify-between gap-3 p-3 rounded-xl border transition-colors ${
+                                  item.estado === "Aprobado" ? "bg-green-50 border-green-200" :
+                                  item.estado === "Retenido" ? "bg-red-50 border-red-200" : "bg-gray-50 border-gray-200"
+                                }`}>
+                                  <div className="flex-1 min-w-0">
+                                    <p className="font-semibold text-sm text-gray-900">{item.nombre}</p>
+                                    <p className="text-xs text-gray-500 mt-0.5">{item.categoria} · {item.cantidad}</p>
+                                  </div>
+                                  {item.estado === "Pendiente" ? (
+                                    <div className="flex gap-1.5 shrink-0">
+                                      <Button
+                                        size="sm"
+                                        className="bg-[#14883F] hover:bg-[#0f6830] text-white h-7 px-2.5 text-xs gap-1"
+                                        onClick={() => updateItemEstado(q.id, item.id, "Aprobado")}
+                                      >
+                                        <CheckCircle2 className="h-3.5 w-3.5" /> Aprobar
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        className="bg-[#D52B1E] hover:bg-[#b52418] text-white h-7 px-2.5 text-xs gap-1"
+                                        onClick={() => updateItemEstado(q.id, item.id, "Retenido")}
+                                      >
+                                        <XCircle className="h-3.5 w-3.5" /> Retener
+                                      </Button>
+                                    </div>
+                                  ) : (
+                                    <Badge variant="outline" className={
+                                      item.estado === "Aprobado"
+                                        ? "bg-green-100 text-green-800 border-green-300 shrink-0"
+                                        : "bg-red-100 text-red-800 border-red-300 shrink-0"
+                                    }>
+                                      {item.estado}
+                                    </Badge>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+
+                            {q.items.every(i => i.estado !== "Pendiente") && (
+                              <div className={`p-3 rounded-lg text-sm font-medium text-center ${
+                                q.items.some(i => i.estado === "Retenido")
+                                  ? "bg-red-50 text-red-700 border border-red-200"
+                                  : "bg-green-50 text-green-700 border border-green-200"
+                              }`}>
+                                {q.items.some(i => i.estado === "Retenido")
+                                  ? `⚠ Revisión completada — ${q.items.filter(i => i.estado === "Retenido").length} ítem(s) retenido(s)`
+                                  : "✓ Revisión completada — todos los ítems aprobados"}
                               </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 pt-4">
-                              <Button className="bg-[#14883F] hover:bg-[#0f6830] text-white h-12" onClick={() => handleReview(q.id, 'Aprobada sin retención')}>Aprobar Libre Tránsito</Button>
-                              <Button variant="destructive" className="bg-[#D52B1E] hover:bg-[#b52418] h-12" onClick={() => handleReview(q.id, 'Retenida/Decomisada')}>Retener / Decomisar</Button>
-                            </div>
+                            )}
                           </div>
                         </DialogContent>
                       </Dialog>
@@ -132,7 +257,7 @@ export default function SAGDashboard() {
                 ))}
                 {queue.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center text-gray-500 py-12">No hay revisiones pendientes</TableCell>
+                    <TableCell colSpan={7} className="text-center text-gray-500 py-12">No hay revisiones pendientes</TableCell>
                   </TableRow>
                 )}
               </TableBody>

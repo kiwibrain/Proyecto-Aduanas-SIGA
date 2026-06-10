@@ -1,7 +1,24 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { GovernmentLogo } from "./GovernmentLogo";
+import { useAuth } from "@/lib/auth";
+import { LogOut, User } from "lucide-react";
 
 export function Layout({ children, fullWidth = false }: { children: React.ReactNode; fullWidth?: boolean }) {
+  const { user, logout } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    setLocation("/");
+  };
+
+  const rolLabel: Record<string, string> = {
+    viajero: "Viajero",
+    aduana: "Aduana",
+    pdi: "PDI",
+    sag: "SAG",
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-[#0032A0] text-white px-4 py-2 rounded z-50 font-medium">
@@ -14,10 +31,28 @@ export function Layout({ children, fullWidth = false }: { children: React.ReactN
           </Link>
           <div className="hidden md:flex items-center space-x-1 text-sm font-medium">
             <Link href="/" className="px-3 py-2 rounded-md hover:bg-blue-50 text-gray-700 hover:text-[#0032A0] transition-colors">Inicio</Link>
-            <Link href="/login" className="px-3 py-2 rounded-md hover:bg-blue-50 text-gray-700 hover:text-[#0032A0] transition-colors">Iniciar Sesión</Link>
-            <Link href="/registro" className="ml-2 px-4 py-2 rounded-md bg-[#0032A0] text-white text-sm font-semibold hover:bg-[#00205B] transition-colors">
-              Registrarse
-            </Link>
+            {user ? (
+              <>
+                <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-[#0032A0] rounded-md font-semibold text-sm">
+                  <User className="h-4 w-4" />
+                  {user.nombre}
+                  <span className="text-xs font-normal text-[#0032A0]/70 ml-1 border-l border-blue-200 pl-1.5">{rolLabel[user.rol] ?? user.rol}</span>
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="ml-1 flex items-center gap-1.5 px-3 py-2 rounded-md text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" /> Cerrar Sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" className="px-3 py-2 rounded-md hover:bg-blue-50 text-gray-700 hover:text-[#0032A0] transition-colors">Iniciar Sesión</Link>
+                <Link href="/registro" className="ml-2 px-4 py-2 rounded-md bg-[#0032A0] text-white text-sm font-semibold hover:bg-[#00205B] transition-colors">
+                  Registrarse
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
