@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 
 import Home from "@/pages/home";
 import Login from "@/pages/login";
+import LoginFuncionario from "@/pages/login-funcionario";
 import Registro from "@/pages/registro";
 import ViajeroDashboard from "@/pages/viajero/dashboard";
 import DeclararProductos from "@/pages/viajero/declarar-productos";
@@ -25,6 +26,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/login" component={Login} />
+      <Route path="/login-funcionario" component={LoginFuncionario} />
       <Route path="/registro" component={Registro} />
       <Route path="/viajero" component={ViajeroDashboard} />
       <Route path="/viajero/declarar-productos" component={DeclararProductos} />

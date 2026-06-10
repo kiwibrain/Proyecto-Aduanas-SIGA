@@ -140,7 +140,7 @@ export default function Home() {
                         <p className="font-bold text-gray-900 text-sm">Funcionario {f.title}</p>
                         <p className="text-gray-400 text-xs truncate">{f.desc}</p>
                       </div>
-                      <Link href="/login" className={`shrink-0 px-4 py-1.5 rounded-lg border-2 font-semibold text-xs transition-colors ${f.btnClass}`}>
+                      <Link href="/login-funcionario" className={`shrink-0 px-4 py-1.5 rounded-lg border-2 font-semibold text-xs transition-colors ${f.btnClass}`}>
                         Acceder
                       </Link>
                     </div>
