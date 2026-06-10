@@ -12,6 +12,7 @@ import DeclararProductos from "@/pages/viajero/declarar-productos";
 import RegistrarVehiculo from "@/pages/viajero/registrar-vehiculo";
 import AutorizacionMenor from "@/pages/viajero/autorizacion-menor";
 import EstadoTramite from "@/pages/viajero/estado-tramite";
+import Notificaciones from "@/pages/viajero/notificaciones";
 import AduanaDashboard from "@/pages/funcionario/aduana/dashboard";
 import AduanaReportes from "@/pages/funcionario/aduana/reportes";
 import PDIDashboard from "@/pages/funcionario/pdi/dashboard";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/viajero/registrar-vehiculo" component={RegistrarVehiculo} />
       <Route path="/viajero/autorizacion-menor" component={AutorizacionMenor} />
       <Route path="/viajero/estado-tramite" component={EstadoTramite} />
+      <Route path="/viajero/notificaciones" component={Notificaciones} />
       <Route path="/funcionario/aduana" component={AduanaDashboard} />
       <Route path="/funcionario/aduana/reportes" component={AduanaReportes} />
       <Route path="/funcionario/pdi" component={PDIDashboard} />
