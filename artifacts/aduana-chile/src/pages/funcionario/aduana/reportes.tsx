@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DatePickerInput } from "@/components/DatePickerInput";
 import { useToast } from "@/hooks/use-toast";
 import { FileDown, Table2, BarChart3 } from "lucide-react";
 
@@ -59,26 +59,20 @@ export default function AduanaReportes() {
             <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
               <div className="space-y-2">
                 <Label>Fecha Desde</Label>
-                <Input
-                  type="text"
-                  placeholder="DD/MM/AAAA"
-                  maxLength={10}
+                <DatePickerInput
                   value={fechaDesde}
-                  onChange={e => setFechaDesde(e.target.value)}
-                  required
-                  className="bg-white"
+                  onChange={setFechaDesde}
+                  fromYear={2020}
+                  toYear={new Date().getFullYear() + 1}
                 />
               </div>
               <div className="space-y-2">
                 <Label>Fecha Hasta</Label>
-                <Input
-                  type="text"
-                  placeholder="DD/MM/AAAA"
-                  maxLength={10}
+                <DatePickerInput
                   value={fechaHasta}
-                  onChange={e => setFechaHasta(e.target.value)}
-                  required
-                  className="bg-white"
+                  onChange={setFechaHasta}
+                  fromYear={2020}
+                  toYear={new Date().getFullYear() + 1}
                 />
               </div>
               <div className="space-y-2">

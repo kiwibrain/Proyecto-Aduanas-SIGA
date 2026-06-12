@@ -11,6 +11,7 @@ import { formatRut, validateRut } from "@/lib/masks";
 import { AlertCircle, CheckCircle2, Upload, File as FileIcon, ChevronLeft } from "lucide-react";
 import { Link } from "wouter";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DatePickerInput } from "@/components/DatePickerInput";
 
 export default function AutorizacionMenor() {
   const { toast } = useToast();
@@ -21,12 +22,14 @@ export default function AutorizacionMenor() {
   const [rutMenor, setRutMenor] = useState("");
   const [rutMenorValido, setRutMenorValido] = useState<boolean | null>(null);
   const [fechaNacimientoMenor, setFechaNacimientoMenor] = useState("");
+  const [fechaNacimientoMenorISO, setFechaNacimientoMenorISO] = useState("");
 
   const [nombreTutor, setNombreTutor] = useState("");
   const [rutTutor, setRutTutor] = useState("");
   const [rutTutorValido, setRutTutorValido] = useState<boolean | null>(null);
   const [relacion, setRelacion] = useState("");
   const [fechaViaje, setFechaViaje] = useState("");
+  const [fechaViajeISO, setFechaViajeISO] = useState("");
 
   const [file, setFile] = useState<File | null>(null);
   const [confirmoOriginal, setConfirmoOriginal] = useState(false);
@@ -53,7 +56,7 @@ export default function AutorizacionMenor() {
       toast({ title: "Error", description: "El RUT del menor no es válido", variant: "destructive" });
       return;
     }
-    const d = new Date(fechaNacimientoMenor);
+    const d = new Date(fechaNacimientoMenorISO || fechaNacimientoMenor);
     const now = new Date();
     const age = now.getFullYear() - d.getFullYear();
     if (age >= 18) {
@@ -72,7 +75,7 @@ export default function AutorizacionMenor() {
       toast({ title: "Error", description: "El RUT del acompañante no es válido", variant: "destructive" });
       return;
     }
-    const viajed = new Date(fechaViaje);
+    const viajed = new Date(fechaViajeISO || fechaViaje);
     if (viajed < new Date()) {
       toast({ title: "Error", description: "La fecha de viaje debe ser futura", variant: "destructive" });
       return;
@@ -154,7 +157,14 @@ export default function AutorizacionMenor() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="fechaNacimientoMenor">Fecha de nacimiento</Label>
-                    <Input id="fechaNacimientoMenor" type="date" value={fechaNacimientoMenor} onChange={(e) => setFechaNacimientoMenor(e.target.value)} />
+                    <DatePickerInput
+                      id="fechaNacimientoMenor"
+                      value={fechaNacimientoMenor}
+                      onChange={setFechaNacimientoMenor}
+                      onChangeISO={setFechaNacimientoMenorISO}
+                      fromYear={new Date().getFullYear() - 18}
+                      toYear={new Date().getFullYear()}
+                    />
                   </div>
                 </div>
                 <div className="flex justify-end pt-4">
@@ -203,7 +213,14 @@ export default function AutorizacionMenor() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="fechaViaje">Fecha programada de viaje</Label>
-                    <Input id="fechaViaje" type="date" value={fechaViaje} onChange={(e) => setFechaViaje(e.target.value)} />
+                    <DatePickerInput
+                      id="fechaViaje"
+                      value={fechaViaje}
+                      onChange={setFechaViaje}
+                      onChangeISO={setFechaViajeISO}
+                      fromYear={new Date().getFullYear()}
+                      toYear={new Date().getFullYear() + 2}
+                    />
                   </div>
                 </div>
                 <div className="flex justify-between pt-4">

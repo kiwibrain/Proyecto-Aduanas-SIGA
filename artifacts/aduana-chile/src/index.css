@@ -213,3 +213,43 @@
     pointer-events: none;
   }
 }
+
+/* === Accesibilidad === */
+html.a11y-text-large  { font-size: 112.5%; }
+html.a11y-text-xlarge { font-size: 125%; }
+
+html.a11y-high-contrast,
+html.a11y-high-contrast body {
+  filter: invert(1) hue-rotate(180deg);
+}
+html.a11y-high-contrast img,
+html.a11y-high-contrast video,
+html.a11y-high-contrast .a11y-no-invert {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+html.a11y-underline-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px;
+}
+
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-text-spacing p,
+html.a11y-text-spacing span,
+html.a11y-text-spacing li,
+html.a11y-text-spacing label,
+html.a11y-text-spacing button,
+html.a11y-text-spacing td,
+html.a11y-text-spacing th {
+  letter-spacing: 0.06em !important;
+  word-spacing: 0.12em !important;
+  line-height: 1.75 !important;
+}

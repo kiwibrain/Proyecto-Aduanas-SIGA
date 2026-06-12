@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DatePickerInput } from "@/components/DatePickerInput";
 import { useLocation } from "wouter";
 import { formatRut, validateRut } from "@/lib/masks";
 import { AlertCircle, CheckCircle2 } from "lucide-react";
@@ -49,6 +50,7 @@ type FormData = z.infer<typeof schema>;
 
 export default function Registro() {
   const [, setLocation] = useLocation();
+  const [fechaNacDisplay, setFechaNacDisplay] = useState("");
   const { register, handleSubmit, formState: { errors, touchedFields }, setValue, watch } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -141,11 +143,15 @@ export default function Registro() {
 
                 <div className="space-y-2">
                   <Label htmlFor="fechaNacimiento">Fecha Nacimiento</Label>
-                  <div className="relative">
-                    <Input id="fechaNacimiento" type="date" {...register("fechaNacimiento")} />
-                    {touchedFields.fechaNacimiento && !errors.fechaNacimiento && <CheckCircle2 className="absolute right-8 top-2 h-5 w-5 text-green-500" />}
-                  </div>
-                  {errors.fechaNacimiento && <p className="text-sm text-red-500 flex items-center gap-1"><AlertCircle className="h-4 w-4" /> {errors.fechaNacimiento.message}</p>}
+                  <DatePickerInput
+                    id="fechaNacimiento"
+                    value={fechaNacDisplay}
+                    onChange={setFechaNacDisplay}
+                    onChangeISO={(iso) => setValue("fechaNacimiento", iso, { shouldValidate: true })}
+                    fromYear={1900}
+                    toYear={new Date().getFullYear()}
+                  />
+                  {errors.fechaNacimiento && <p className="text-sm text-red-500 flex items-center gap-1 mt-1"><AlertCircle className="h-4 w-4" /> {errors.fechaNacimiento.message}</p>}
                 </div>
 
                 <div className="space-y-2">
