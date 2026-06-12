@@ -38,13 +38,15 @@ export default function AutorizacionMenor() {
   const handleRutMenorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatRut(e.target.value);
     setRutMenor(formatted);
-    setRutMenorValido(formatted.length > 5 ? validateRut(formatted) : null);
+    const clean = formatted.replace(/[^0-9kK]/g, "");
+    setRutMenorValido(clean.length >= 7 ? validateRut(formatted) : null);
   };
 
   const handleRutTutorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatRut(e.target.value);
     setRutTutor(formatted);
-    setRutTutorValido(formatted.length > 5 ? validateRut(formatted) : null);
+    const clean = formatted.replace(/[^0-9kK]/g, "");
+    setRutTutorValido(clean.length >= 7 ? validateRut(formatted) : null);
   };
 
   const nextStep1 = () => {
@@ -52,8 +54,9 @@ export default function AutorizacionMenor() {
       toast({ title: "Error", description: "Complete todos los campos", variant: "destructive" });
       return;
     }
-    if (rutMenorValido === false) {
-      toast({ title: "Error", description: "El RUT del menor no es válido", variant: "destructive" });
+    if (!validateRut(rutMenor)) {
+      setRutMenorValido(false);
+      toast({ title: "RUT inválido", description: "El RUT del menor no es válido. Formato: 12.345.678-9", variant: "destructive" });
       return;
     }
     const d = new Date(fechaNacimientoMenorISO || fechaNacimientoMenor);
@@ -71,8 +74,9 @@ export default function AutorizacionMenor() {
       toast({ title: "Error", description: "Complete todos los campos", variant: "destructive" });
       return;
     }
-    if (rutTutorValido === false) {
-      toast({ title: "Error", description: "El RUT del acompañante no es válido", variant: "destructive" });
+    if (!validateRut(rutTutor)) {
+      setRutTutorValido(false);
+      toast({ title: "RUT inválido", description: "El RUT del acompañante no es válido. Formato: 12.345.678-9", variant: "destructive" });
       return;
     }
     const viajed = new Date(fechaViajeISO || fechaViaje);

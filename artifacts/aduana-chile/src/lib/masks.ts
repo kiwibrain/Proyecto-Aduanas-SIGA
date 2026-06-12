@@ -10,7 +10,8 @@ export function formatRut(value: string): string {
 
 export function validateRut(rut: string): boolean {
   const clean = rut.replace(/[^0-9kK]/g, "").toUpperCase();
-  if (clean.length < 2) return false;
+  // Must have at least 7 chars: 6 body digits + 1 DV (minimum realistic Chilean RUT)
+  if (clean.length < 7) return false;
   const body = clean.slice(0, -1);
   const dv = clean.slice(-1);
   let sum = 0;

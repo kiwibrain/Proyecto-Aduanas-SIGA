@@ -23,6 +23,13 @@ export function Layout({ children, fullWidth = false }: { children: React.ReactN
     sag: "SAG",
   };
 
+  const dashboardPath: Record<string, string> = {
+    viajero: "/viajero",
+    aduana: "/funcionario/aduana",
+    pdi: "/funcionario/pdi",
+    sag: "/funcionario/sag",
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-[#0032A0] text-white px-4 py-2 rounded z-50 font-medium">
@@ -37,13 +44,17 @@ export function Layout({ children, fullWidth = false }: { children: React.ReactN
             <Link href="/" className="px-3 py-2 rounded-md hover:bg-blue-50 text-gray-700 hover:text-[#0032A0] transition-colors">{t.home}</Link>
             {user ? (
               <>
-                <span className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-[#0032A0] rounded-md font-semibold text-sm">
+                <Link
+                  href={dashboardPath[user.rol] ?? "/"}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-[#0032A0] rounded-md font-semibold text-sm hover:bg-blue-100 transition-colors"
+                  title={language === "es" ? "Ir a mi panel" : "Go to my dashboard"}
+                >
                   <User className="h-4 w-4" />
                   {user.nombre}
                   <span className="text-xs font-normal text-[#0032A0]/70 ml-1 border-l border-blue-200 pl-1.5">
                     {rolLabel[user.rol] ?? user.rol}
                   </span>
-                </span>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="ml-1 flex items-center gap-1.5 px-3 py-2 rounded-md text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors"
