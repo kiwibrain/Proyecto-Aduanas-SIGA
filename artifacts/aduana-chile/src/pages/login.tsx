@@ -31,7 +31,7 @@ export default function Login() {
             <Shield className="h-3 w-3" /> Acceso Ciudadano
           </div>
           <h2 className="text-3xl font-extrabold mb-4">Bienvenido al SIGA</h2>
-          <p className="text-white/80 mb-8 text-sm">Sistema Digital de Gestión Aduanera del Gobierno de Chile.</p>
+          <p className="text-white/80 mb-8 text-sm">Sistema Integrado de Gestión Aduanera del Gobierno de Chile.</p>
           <ul className="space-y-4">
             <li className="flex items-start gap-3">
               <CheckCircle className="h-5 w-5 text-green-300 mt-0.5 shrink-0" />

@@ -17,7 +17,7 @@ export default function Home() {
                 SIGA
               </h1>
               <p className="text-[#7BC8FF] text-lg font-semibold mb-3 uppercase tracking-widest">
-                Sistema Digital de Gestión Aduanera
+                Sistema Integrado de Gestión Aduanera
               </p>
               <p className="text-white/80 text-base mb-8 max-w-lg">
                 Realice sus trámites de frontera de forma digital, rápida y segura desde cualquier dispositivo.
